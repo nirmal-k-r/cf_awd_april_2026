@@ -1,0 +1,135 @@
+<%- include('../../partials/header.ejs') %>
+
+<section>
+    <div class="container">
+        <div class="alert alert-success mx-auto text-center" role="alert">
+            Welcome to the Admin Dashboard!
+        </div>
+        <div class="text-center">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Create product
+            </button>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Create new product</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" action="/admin/create-product">
+                        <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="productName" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter product name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter product description" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productPrice" class="form-label ">Price</label>
+                            <input type="number" class="form-control" id="price" name="price" placeholder="Enter product price" required>
+                        
+                        </div>
+                        <div class="mb-3">
+                            <label for="productStock" class="form-label ">Stock</label>
+                            <input type="number" class="form-control" id="stock" name="stock" placeholder="Enter product stock" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="productCategory" class="form-label ">Category</label>
+                            <select class="form-select" id="category" name="category" required>
+                                <option value="electronics">Electronics</option>
+                                <option value="clothing">Clothing</option>
+                                <option value="books">Books</option>
+                                <option value="home">Home</option>
+                                <option value="beauty">Beauty</option>
+                                <option value="sports">Sports</option>
+                                <option value="toys">Toys</option>
+                                <option value="automotive">Automotive</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="productImage" class="form-label ">Image</label>
+                            <input type="file" class="form-control" id="uploadedImage" name="uploadedImage">
+                        </div>
+
+                        <div type="hidden" class="mb-3">
+                            <input type="hidden" id="image" name="image">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Create product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<br><br>
+<section>
+    <div class="container">
+        <div class="text-center">
+            <h2>Product management</h2>
+        </div>
+        
+         <br><br>
+        <div class="container mx-auto text-center">
+            <div class="row">   
+            <% products.forEach(product => { %>
+                <div class="card col-md-8 mb-3 mx-auto">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="<%= product.image %> " class="img-fluid rounded-start dash-img" alt="<%= product.name %>">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= product.name %></h5>
+                                <p class="card-text"><%= product.description %></p>
+                                <a type="button" class="btn btn-primary btn-sm text-light" href="/admin/edit-product/<%= product._id %>">Edit</a>
+                                <a class="btn btn-danger btn-sm text-light" href="/admin/delete-product/<%= product._id %>">Delete</a>
+                            </div>
+                         </div>
+                    </div>
+                </div>
+            <% }) %>
+
+     
+        </div>
+       
+
+
+    </div>
+   
+</section>
+
+<script>
+    //encode image to base64 string
+    const uploadedImage = document.getElementById('uploadedImage');
+    const encodedImage = document.getElementById('image');
+
+    uploadedImage.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                encodedImage.value = reader.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+
+        
+<%- include('../../partials/footer.ejs') %> 

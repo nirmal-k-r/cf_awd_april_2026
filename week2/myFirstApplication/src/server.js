@@ -2,7 +2,11 @@
 const express = require('express');
 const ejs = require('ejs');
 const path = require('path');
+const express_session=require('express-session');
+const bodyParser = require('body-parser');
 
+//database connection
+const db=require('./config/db');
 
 //router imports
 const adminRouter = require('./routes/admin');
@@ -20,6 +24,22 @@ app.set('views', 'src/templates');
 //set static files directory
 app.use(express.static('public'));
 
+//session middleware
+app.use(express_session({
+    secret:"hycgw$%67gdhmwd",
+    resave:false,
+    saveUninitialized:false
+}));
+
+
+//body parser middleware
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+//body parser middleware
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
 
 // Logging middleware
 app.use((req,res,next) => {
@@ -33,7 +53,7 @@ const PORT = process.env.PORT || 3000;
 
 //connect routers
 app.use('/admin', adminRouter);
-app.use('/home', homeRouter);
+app.use('', homeRouter);
 app.use('/auth', authRouter);
 
 // 404 handler (must be after all routes) - 404 -This runs if no route matches the request.

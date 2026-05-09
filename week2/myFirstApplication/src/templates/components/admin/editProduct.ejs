@@ -1,0 +1,91 @@
+<%- include('../../partials/header.ejs') %>
+
+<section>
+    <div class="container">
+        <div class="alert alert-info mx-auto text-center" role="alert">
+            Editing a product
+        </div>
+        <div class="text-center">
+
+            <div class="row mx-auto text-center">
+                <div class="col-md-8 mx-auto">
+                    <form method="POST" action="/admin/update-product/<%= product._id %>">
+                        <div class="mb-3">
+                            <img src="<%= product.image %>" alt="Product Image" class="img-thumbnail mb-3" style="max-width: 200px;">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Name</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="<%= product.name %>" name="name" required>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Description</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="<%= product.description %>" name="description" required>
+                        </div>
+                         <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Price</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="<%= product.price %>" name="price" required>
+                        </div>
+
+                         <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Stock</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="<%= product.stock %>" name="stock" required>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Category</span>
+                            <select class="form-select" id="category" name="category" required>
+                                <option value="electronics" <% if (product.category == 'electronics') { %>selected<% } %>>Electronics</option>
+                                <option value="clothing" <% if (product.category == 'clothing') { %>selected<% } %>>Clothing</option>
+                                <option value="books" <% if (product.category == 'books') { %>selected<% } %>>Books</option>
+                                <option value="home" <% if (product.category == 'home') { %>selected<% } %>>Home</option>
+                                <option value="beauty" <% if (product.category == 'beauty') { %>selected<% } %>>Beauty</option>
+                                <option value="sports" <% if (product.category == 'sports') { %>selected<% } %>>Sports</option>
+                                <option value="toys" <% if (product.category == 'toys') { %>selected<% } %>>Toys</option>
+                                <option value="automotive" <% if (product.category == 'automotive') { %>selected<% } %>>Automotive</option>
+                                <option value="other" <% if (product.category == 'other') { %>selected<% } %>>Other</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Update Image</span>
+                            <input type="file" class="form-control" id="uploadedImage" name="uploadedImage" aria-label="Update Image" aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+                        <div type="hidden" class="mb-3">
+                            <input type="hidden" id="image" name="image" value="<%= product.image %>">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Update product</button>
+
+                    </form>
+                </div>  
+            </div>
+        </div>
+
+    </div>  
+
+
+
+</section>
+
+<script>
+    //encode image to base64 string
+    const uploadedImage = document.getElementById('uploadedImage');
+    const encodedImage = document.getElementById('image');
+
+    uploadedImage.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                encodedImage.value = reader.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+
+        
+<%- include('../../partials/footer.ejs') %> 

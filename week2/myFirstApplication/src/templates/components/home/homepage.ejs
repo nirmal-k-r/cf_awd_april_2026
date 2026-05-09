@@ -1,15 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="/css/style.css">
-        <title>ShopMaster</title>
-    </head>
-    <body>
-        <%- include('../../partials/nav.ejs') %>
-        <h1>Welcome to ShopMaster</h1>
-        <p>Your one-stop shop for all your needs!</p>
+<%- include('../../partials/header.ejs') %>
+
+<section>
+    <div class="container">
+        <% if (user) { %>
+            <div class="alert alert-success text-center col-md-6 mx-auto" role="alert">
+                Welcome to Shopmaster <%= user.name %>
+            </div>
+        <% } %> 
+
+        <br>
+        <div class="col-md-8 mx-auto">
+            <form class="d-flex" role="search">
+                <div class="row mx-auto">
+                    <div class="col-md-10">
+                        <input class="form-control me-2" type="search" name="keyword" id="keyword" placeholder="Search for products..." onkeydown="showSuggestions()" aria-label="Search">
+                        <div class="suggestionBox">
+                        <!-- Search suggestions will be displayed here -->
+
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </div>
+                </div>
+                
+                
+            </form>
+            
+        </div>
         
-    </body>
-</html>
+    </div>
+</section>
+<br><br>
+
+<section>
+    <div class="container ">
+        <div class="row mx-auto text-center">
+            <% products.forEach(product => { %>
+                <div class="col-md-3 mb-5">
+                    <div class="card">
+                        <img class="card-img-top" src="<%= product.image %>" alt="Card image cap">
+                        <div class="card-body text-center">
+                            <h5 class="card-title"><%= product.name %></h5>
+                            <p class="card-text"><%= product.category %></p>
+                        </div>
+                        
+                        <div class="card-body text-center">
+                            <p class="card-textn fw-bold"> Rs <%= product.price %></p>
+                            <a href="#" class="btn btn-primary text-center text-light">Add to Cart</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            <% }) %>
+               
+    </div>
+</section>
+
+
+        
+<%- include('../../partials/footer.ejs') %> 
+
+
+<script>
+    function showSuggestions() {
+        const keyword = document.getElementById('keyword').value;
+        if (keyword.length > 0) {
+            fetch(`/searchSuggestions?keyword=${keyword}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the search suggestions here
+                    displaySuggestions(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching search suggestions:', error);
+                });
+        }
+    }
+
+    function displaySuggestions(suggestions) {
+        const suggestionBox = document.querySelector('.suggestionBox');
+        suggestionBox.innerHTML = ''; // Clear previous suggestions
+
+        suggestions.forEach(suggestion => {
+            const suggestionItem = document.createElement('div');
+            suggestionItem.classList.add('suggestionItem');
+            suggestionItem.textContent = suggestion.name; // Assuming each suggestion has a 'name' property
+            suggestionItem.href = suggestion.link; 
+            suggestionBox.appendChild(suggestionItem);
+        });
+    }
+</script>
+
+
+

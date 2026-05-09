@@ -1,0 +1,49 @@
+<%- include('../../partials/header.ejs') %>
+
+    <section>
+        <div class="container">
+            <div class="text-center">
+                <h1>Register</h1>
+            </div>
+
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-6">
+                    <form action="/auth/register" method="POST" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                            <div class="invalid-feedback">Please enter a valid email.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                            <div class="invalid-feedback">Please enter your password.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                            <div class="invalid-feedback">Please enter your name.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="text" class="form-control" id="phone" name="phone" required>
+                            <div class="invalid-feedback">Please enter your phone number.</div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                            <button type="button" class="btn btn-link mt-2" onclick="window.location.href='/auth'">Already have an account? Login</button>
+                        </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+        
+<%- include('../../partials/footer.ejs') %> 
+

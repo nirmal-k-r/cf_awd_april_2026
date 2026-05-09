@@ -1,3 +1,34 @@
-body{
+/* body{
     background-color: brown;
+} */
+
+.nav-color{
+    background-color: #e9edc9;
+
+}
+
+.dash-img{
+    width: 100px;
+    height: 100px;
+    padding:2px;
+    margin: 2px;
+    margin-top: 15px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.nav-color ul,li,a{
+    color: #222236 !important;
+}
+
+.suggestionBox{
+    margin-top:5px;
+    margin-bottom:10px;
+}
+
+.suggestionItem{
+    background-color: #e9edc9;
+    padding: 5px;
+    border-bottom: 1px solid #e9edc9;
+    cursor: pointer;
 }
