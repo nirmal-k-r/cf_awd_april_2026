@@ -1,0 +1,35 @@
+<%- include('../../partials/header.ejs') %>
+
+<section>
+
+<section>
+    <div class="container ">
+        <div class="row mx-auto text-center">
+
+            <div class="row">
+                <div class="col-md-4 ">
+                    <img src="<%= product.image %>" alt="Card image cap" style="max-width: 200px;">
+                </div>  
+
+                <div class="col-md-8">
+                     <h5 class="card-title"><%= product.name %></h5>
+                    <p class="card-text"><%= product.description %></p>
+                    <p class="card-text"><%= product.category %></p>
+                    <p class="card-textn fw-bold"> Rs <%= product.price %></p>
+                    <a href="#" class="btn btn-primary text-center text-light">Add to Cart</a>
+                
+                </div>
+
+                    
+            </div>
+
+               
+    </div>
+</section>
+
+
+        
+<%- include('../../partials/footer.ejs') %> 
+
+
+

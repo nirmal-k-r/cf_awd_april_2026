@@ -1,0 +1,39 @@
+<%- include('../../partials/header.ejs') %>
+
+
+<section>
+    <div class="container">
+        <% if (Object.keys(cart).length === 0) { %>
+            <div class="alert alert-info text-center" role="alert">
+                Your cart is empty. Start shopping now!
+            </div>
+        <% }else{ %> 
+            <div class="container">
+                <div class="alert alert-success mx-auto text-center" role="alert">
+                    Review your cart
+                </div>
+            </div>
+            <div class="container mx-auto text-center">
+                <% cartDetails.forEach(item => { %>
+                    <div class="card row"> 
+                        <div class="col-md-4">
+                            <img src="<%= item.product.image %>" class="img-fluid rounded-start dash-img" alt="Product Image" style="max-height: 100px;">
+                        </div>
+                        
+                        <div class="col-md-8">
+
+                            <h5 class="card-title"><%= item.product.name %></h5>
+                            <input type="number" class="form-control mb-3" value="<%= item.quantity %>" min="1">
+                            <a href="#" class="btn btn-danger">Remove</a>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
+       
+
+
+    </div>
+   
+</section> 
+<%- include('../../partials/footer.ejs') %> 

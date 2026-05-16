@@ -34,20 +34,24 @@
 <br><br>
 
 <section>
-    <div class="container ">
+    <div class="container mx-auto">
         <div class="row mx-auto text-center">
             <% products.forEach(product => { %>
                 <div class="col-md-3 mb-5">
                     <div class="card">
-                        <img class="card-img-top" src="<%= product.image %>" alt="Card image cap">
+                        <a href="/product/<%= product._id %>">
+                            <img class="card-img-top" src="<%= product.image %>" alt="Card image cap">
+                        </a>
                         <div class="card-body text-center">
-                            <h5 class="card-title"><%= product.name %></h5>
+                            <h5 class="card-title">
+                                <a href="/product/<%= product._id %>" class="no-text-decoration"><%= product.name %></a>
+                            </h5>
                             <p class="card-text"><%= product.category %></p>
                         </div>
                         
                         <div class="card-body text-center">
                             <p class="card-textn fw-bold"> Rs <%= product.price %></p>
-                            <a href="#" class="btn btn-primary text-center text-light">Add to Cart</a>
+                            <button class="btn btn-primary text-center text-light" onclick="addToCart('<%= product._id %>')">Add to cart</button>
                         </div>
                     </div>
 
@@ -86,12 +90,35 @@
         suggestions.forEach(suggestion => {
             const suggestionItem = document.createElement('div');
             suggestionItem.classList.add('suggestionItem');
-            suggestionItem.textContent = suggestion.name; // Assuming each suggestion has a 'name' property
-            suggestionItem.href = suggestion.link; 
+            anchorElement = document.createElement('a');
+            anchorElement.textContent = suggestion.name;
+            anchorElement.classList.add('no-text-decoration');
+            anchorElement.href = suggestion.link; 
+            suggestionItem.appendChild(anchorElement);
             suggestionBox.appendChild(suggestionItem);
         });
     }
-</script>
 
+    function addToCart(productId) {
+        fetch(`/addToCart?productId=${productId}&quantity=1`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.message=="success") {
+                alert('Product added to cart successfully!');
+            } else {
+                alert('Failed to add product to cart.');
+            }
+        })
+        .catch(error => {
+            console.error('Error adding product to cart:', error);
+            alert('An error occurred while adding the product to the cart.');
+        });
+    }
+</script>
+<!-- Request parameter
+http://localhost:3000/product/69f5a8552a21950db0f31a12
+
+Query parameter 
+http://localhost:3000/product/id=69f5a8552a21950db0f31a12&qty=1 -->
 
 
