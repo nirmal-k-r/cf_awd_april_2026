@@ -2,6 +2,7 @@
 const router=require('express').Router();
 
 const Product=require('../models/product');
+const Purchase=require('../models/purchases');
 
 //home route
 // router.get('/', (req, res) => {
@@ -103,20 +104,66 @@ router.get('/delete-from-cart', async (req, res) => {
     if (req.session.cart && productId in req.session.cart){
         delete req.session.cart[productId];
     }
-    res.json({message: 'success'});
+    // res.json({message: 'success'});
+    res.redirect('/cart');
 });
 
 //update cart route
-router.get('/update-cart', async (req, res) => {
-    productId=req.query.productId;
-    quantity=req.query.quantity;
+router.post('/update-cart', async (req, res) => {
+    productId=req.body.productId;
+    quantity=req.body.quantity;
 
     if (req.session.cart && productId in req.session.cart){
         req.session.cart[productId]=quantity;
+        totalPrice=quantity * (await Product.findOne({_id: productId})).price;
     }
-    res.json({message: 'success'});
+    res.json({message: 'success', totalPrice: totalPrice});
 });
 
+router.get('/cartTotal', async (req, res) => {
+    cart=req.session.cart || {};
+    productIds=Object.keys(cart);
+    products=await Product.find({_id: {$in: productIds}}); //fetches products whose ids are in productIds array
+    
+    totalPrice=0;
+    for (cartItem in cart){
+        product=await Product.findOne({_id: cartItem});
+        totalPrice += product.price * cart[cartItem];
+    }
+    
+    res.json({message: 'success', totalPrice: totalPrice});
+});
+
+
+router.get('/checkout', async (req, res) => {
+    if (!req.session.user){
+        return res.redirect('/auth');
+    }else{
+         //create purchase record in db
+        cart=req.session.cart || {};
+        productIds=Object.keys(cart);
+        products=await Product.find({_id: {$in: productIds}}); //fetches products whose ids are in productIds array
+        
+        totalPrice=0;
+        purchaseProducts=[];
+        for (cartItem in cart){
+            product=await Product.findOne({_id: cartItem});
+            totalPrice += product.price * cart[cartItem];
+            purchaseProducts.push({productId: cartItem, quantity: cart[cartItem]});
+        }
+
+        const purchase = new Purchase({
+            userId: req.session.user._id,
+            products: purchaseProducts,
+            totalPrice: totalPrice
+        });
+
+        await purchase.save();
+        req.session.cart = {};
+        res.render('components/home/purchaseSuccess', {user: req.session.user || null});
+    }
+   
+});
 
 router.get('/cart', async (req, res) => {
     cart=req.session.cart || {};
